@@ -113,6 +113,13 @@ async function uploadFile() {
     const data = await res.json();
     extractedData = data;
     populateVerifyForm(data);
+    // Carry email from upload form to verify form (not in PDF extract response)
+    if (!data.client_email) {
+      const uploadEmail = $('#upload-email').value.trim();
+      if (uploadEmail) {
+        $('#f-email').value = uploadEmail;
+      }
+    }
     showState('verify');
   } catch (err) {
     alert('Error extracting data: ' + err.message);
