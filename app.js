@@ -85,6 +85,13 @@ function clearFile() {
 async function uploadFile() {
   if (!selectedFile) return;
 
+  const email = $('#upload-email').value.trim();
+  if (!email) {
+    alert('Please enter a client email address.');
+    $('#upload-email').focus();
+    return;
+  }
+
   const btn = $('#btn-upload');
   const label = btn.querySelector('.btn-label');
   const loading = btn.querySelector('.btn-loading');
