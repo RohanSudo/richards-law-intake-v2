@@ -20,13 +20,49 @@
           <span class="firm-tagline">Case Intake Portal</span>
         </div>
       </div>
+      <div class="top-bar-right" id="user-info" hidden>
+        <span class="user-name" id="user-display"></span>
+        <button class="btn-logout" id="btn-logout" title="Sign out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
   <main class="container">
 
+    <!-- ==================== STATE 0: LOGIN ==================== -->
+    <section id="state-login" class="state active">
+      <div class="login-wrapper">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-logo">R<span>&amp;</span>L</div>
+            <h1>Richards &amp; Law</h1>
+            <p>Case Intake Portal</p>
+          </div>
+
+          <form id="login-form" autocomplete="off">
+            <div class="form-group">
+              <label for="login-user">Username</label>
+              <input type="text" id="login-user" placeholder="Enter your username" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="login-pass">Password</label>
+              <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="off">
+            </div>
+            <div class="login-error" id="login-error" hidden>Invalid username or password.</div>
+            <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+          </form>
+
+          <div class="login-footer">
+            <p>Authorized personnel only. All activity is logged.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== STATE 1: UPLOAD ==================== -->
-    <section id="state-upload" class="state active">
+    <section id="state-upload" class="state">
       <div class="card upload-card">
         <div class="card-header">
           <h1>New Case Intake</h1>

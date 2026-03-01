@@ -4,6 +4,12 @@
 const UPLOAD_WEBHOOK = 'https://auto.brandjetmedia.com/webhook/police-report-upload';
 const APPROVE_WEBHOOK = 'https://auto.brandjetmedia.com/webhook/approve-matter';
 
+// Authorized users
+const USERS = {
+  'arichard': { password: 'RL2026!', name: 'Andrew Richards' },
+  'swans':    { password: 'hackathon', name: 'Swans Evaluator' }
+};
+
 // ---- DOM Helpers ----
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -11,14 +17,60 @@ const $$ = (sel) => document.querySelectorAll(sel);
 // ---- State ----
 let selectedFile = null;
 let extractedData = null;
+let currentUser = null;
 
 // ---- Init ----
 document.addEventListener('DOMContentLoaded', () => {
+  initLogin();
   initUpload();
   initTabs();
   initVerify();
   initProcessing();
+
+  // Check session
+  const saved = sessionStorage.getItem('rl_user');
+  if (saved) {
+    currentUser = JSON.parse(saved);
+    onLogin();
+  }
 });
+
+// ============================
+// LOGIN
+// ============================
+function initLogin() {
+  $('#login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = $('#login-user').value.trim().toLowerCase();
+    const pass = $('#login-pass').value;
+
+    if (USERS[user] && USERS[user].password === pass) {
+      currentUser = { username: user, name: USERS[user].name };
+      sessionStorage.setItem('rl_user', JSON.stringify(currentUser));
+      $('#login-error').hidden = true;
+      onLogin();
+    } else {
+      $('#login-error').hidden = false;
+      $('#login-pass').value = '';
+      $('#login-pass').focus();
+    }
+  });
+
+  $('#btn-logout').addEventListener('click', () => {
+    currentUser = null;
+    sessionStorage.removeItem('rl_user');
+    $('#user-info').hidden = true;
+    showState('login');
+    $('#login-user').value = '';
+    $('#login-pass').value = '';
+  });
+}
+
+function onLogin() {
+  $('#user-display').textContent = currentUser.name;
+  $('#user-info').hidden = false;
+  showState('upload');
+}
 
 // ============================
 // STATE 1: UPLOAD
