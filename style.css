@@ -413,6 +413,11 @@ body {
   gap: 8px;
 }
 
+/* hidden attribute must win over display:flex */
+[hidden] {
+  display: none !important;
+}
+
 /* ---- Spinner ---- */
 .spinner {
   width: 16px;
