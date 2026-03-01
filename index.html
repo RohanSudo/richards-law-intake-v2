@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Richards &amp; Law - Case Intake Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">
+        <div class="logo-icon">R<span>&amp;</span>L</div>
+        <div class="logo-text">
+          <span class="firm-name">Richards &amp; Law</span>
+          <span class="firm-tagline">Case Intake Portal</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== STATE 1: UPLOAD ==================== -->
+    <section id="state-upload" class="state active">
+      <div class="card upload-card">
+        <div class="card-header">
+          <h1>New Case Intake</h1>
+          <p>Upload a police report to begin processing a new personal injury case.</p>
+        </div>
+
+        <div class="upload-area" id="drop-zone">
+          <div class="upload-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <polyline points="9 15 12 12 15 15"/>
+            </svg>
+          </div>
+          <p class="upload-text">Drag &amp; drop police report PDF here</p>
+          <p class="upload-subtext">or click to browse files</p>
+          <input type="file" id="file-input" accept=".pdf" hidden>
+        </div>
+
+        <div class="file-selected" id="file-info" hidden>
+          <div class="file-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span id="file-name"></span>
+            <button class="file-remove" id="btn-remove" title="Remove file">&times;</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="upload-email">Client Email</label>
+          <input type="email" id="upload-email" value="talent.legal-engineer.hackathon.automation-email@swans.co" placeholder="client@example.com">
+        </div>
+
+        <button class="btn btn-primary btn-full" id="btn-upload" disabled>
+          <span class="btn-label">Upload &amp; Extract Data</span>
+          <span class="btn-loading" hidden>
+            <span class="spinner"></span>
+            Analyzing report with AI...
+          </span>
+        </button>
+
+        <div class="upload-progress" id="upload-progress" hidden>
+          <div class="progress-bar">
+            <div class="progress-fill" id="upload-progress-fill"></div>
+          </div>
+          <p class="progress-text">GPT-4o is reading the document. This may take 15-30 seconds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STATE 2: VERIFY ==================== -->
+    <section id="state-verify" class="state">
+      <div class="card verify-card">
+        <div class="card-header">
+          <div class="card-header-row">
+            <div>
+              <h1>Verify Extracted Data</h1>
+              <p>Review and correct the AI-extracted information before processing.</p>
+            </div>
+            <button class="btn btn-ghost" id="btn-back">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              Start Over
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab active" data-tab="client">Client Information</button>
+          <button class="tab" data-tab="accident">Accident Details</button>
+          <button class="tab" data-tab="defendant">Defendant Information</button>
+        </div>
+
+        <!-- Tab: Client -->
+        <div class="tab-panel active" id="tab-client">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-first-name">First Name</label>
+              <input type="text" id="f-first-name" data-field="client_first_name">
+            </div>
+            <div class="form-group">
+              <label for="f-last-name">Last Name</label>
+              <input type="text" id="f-last-name" data-field="client_last_name">
+            </div>
+            <div class="form-group">
+              <label for="f-dob">Date of Birth</label>
+              <input type="date" id="f-dob" data-field="client_dob">
+            </div>
+            <div class="form-group">
+              <label for="f-sex">Sex</label>
+              <select id="f-sex" data-field="client_sex">
+                <option value="">Select...</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label for="f-address">Address</label>
+              <textarea id="f-address" data-field="client_address" rows="2"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label for="f-email">Client Email</label>
+              <input type="email" id="f-email" data-field="client_email">
+            </div>
+          </div>
+          <fieldset class="fieldset">
+            <legend>Client Vehicle</legend>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="f-client-plate">Plate Number</label>
+                <input type="text" id="f-client-plate" data-field="client_vehicle_plate">
+              </div>
+              <div class="form-group">
+                <label for="f-client-vehicle">Vehicle Description</label>
+                <input type="text" id="f-client-vehicle" data-field="client_vehicle_description">
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Tab: Accident -->
+        <div class="tab-panel" id="tab-accident">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-accident-date">Accident Date</label>
+              <input type="date" id="f-accident-date" data-field="accident_date">
+            </div>
+            <div class="form-group">
+              <label for="f-sol-date">Statute of Limitations</label>
+              <input type="date" id="f-sol-date" data-field="statute_of_limitations_date" readonly>
+              <span class="field-hint">Auto-calculated (accident date + 8 years)</span>
+            </div>
+            <div class="form-group full-width">
+              <label for="f-location">Accident Location</label>
+              <textarea id="f-location" data-field="accident_location" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="f-num-vehicles"># Vehicles</label>
+              <input type="number" id="f-num-vehicles" data-field="num_vehicles" min="0">
+            </div>
+            <div class="form-group">
+              <label for="f-num-injured"># Injured</label>
+              <input type="number" id="f-num-injured" data-field="num_injured" min="0">
+            </div>
+            <div class="form-group">
+              <label for="f-num-killed"># Killed</label>
+              <input type="number" id="f-num-killed" data-field="num_killed" min="0">
+            </div>
+            <div class="form-group full-width">
+              <label for="f-description">Accident Description</label>
+              <textarea id="f-description" data-field="accident_description" rows="4"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Defendant -->
+        <div class="tab-panel" id="tab-defendant">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="f-defendant">Defendant Name</label>
+              <input type="text" id="f-defendant" data-field="defendant_name">
+            </div>
+          </div>
+          <fieldset class="fieldset">
+            <legend>Defendant Vehicle</legend>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="f-def-plate">Plate Number</label>
+                <input type="text" id="f-def-plate" data-field="defendant_vehicle_plate">
+              </div>
+              <div class="form-group">
+                <label for="f-def-vehicle">Vehicle Description</label>
+                <input type="text" id="f-def-vehicle" data-field="defendant_vehicle_description">
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn btn-primary btn-full" id="btn-approve">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Approve &amp; Process Case
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STATE 3: PROCESSING ==================== -->
+    <section id="state-processing" class="state">
+      <div class="card processing-card">
+        <div class="card-header">
+          <h1 id="processing-title">Processing case...</h1>
+          <p id="processing-subtitle">Setting up the matter in Clio and generating documents.</p>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar-large">
+            <div class="progress-fill-large" id="proc-progress-fill"></div>
+          </div>
+          <span class="progress-percent" id="proc-percent">0%</span>
+        </div>
+
+        <div class="steps-list" id="steps-list">
+          <div class="step" data-step="0">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Searching for contact in Clio</span>
+            </div>
+          </div>
+          <div class="step" data-step="1">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Updating contact information</span>
+            </div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Searching for existing matter</span>
+            </div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Updating matter with custom fields</span>
+            </div>
+          </div>
+          <div class="step" data-step="4">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Creating statute of limitations calendar entry</span>
+            </div>
+          </div>
+          <div class="step" data-step="5">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Generating retainer agreement</span>
+            </div>
+          </div>
+          <div class="step" data-step="6">
+            <div class="step-icon pending"></div>
+            <div class="step-content">
+              <span class="step-label">Sending retainer to client via email</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-box" id="result-box" hidden>
+          <div class="result-icon" id="result-icon"></div>
+          <div class="result-text" id="result-text"></div>
+          <div class="result-details" id="result-details"></div>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="btn-new-case" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Process New Case
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Richards &amp; Law - Internal Case Management System</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
